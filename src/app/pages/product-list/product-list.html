@@ -1,0 +1,60 @@
+<div class="parent">
+<!-- Product List -->
+  <div *ngIf="productList.length > 0" class="mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="mb-0">🧾 Product List</h3>
+      <button class="btn btn-primary" (click)="createProduct()">
+        + Add Product
+      </button>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let product of productList; let i = index">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <!-- If editing this product -->
+            <ng-container *ngIf="editingIndex === i; else viewMode">
+              <h5 class="card-title d-flex justify-content-between align-items-center">
+                <input class="form-control" [(ngModel)]="updateProduct.name" placeholder="Product name" />
+                <input class="form-control ms-2" type="number" [(ngModel)]="updateProduct.price" placeholder="Price" />
+              </h5>
+              <textarea class="form-control mb-2" [(ngModel)]="updateProduct.description" placeholder="Description"></textarea>
+              <input class="form-control" type="number" [(ngModel)]="updateProduct.quantity" placeholder="Quantity" />
+            </ng-container>
+
+            <!-- View mode (default) -->
+            <ng-template #viewMode>
+              <h5 class="card-title d-flex justify-content-between align-items-center">
+                <span>📦 {{ product.name }}</span>
+                <span class="badge bg-primary">💵 ₹{{ product.price }}</span>
+              </h5>
+              <p class="card-text">📝 {{ product.description }}</p>
+              <p class="card-text"><strong>Quantity:</strong> {{ product.quantity }}</p>
+            </ng-template>
+          </div>
+
+          <div class="card-footer d-flex justify-content-between">
+            <ng-container *ngIf="editingIndex === i; else actionButtons">
+              <button class="btn btn-sm btn-success me-1" (click)="saveEdit()">💾 Save</button>
+              <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">❌ Cancel</button>
+            </ng-container>
+
+            <ng-template #actionButtons>
+              <button class="btn btn-sm btn-outline-primary" (click)="updateProductClick(i)">
+                ✏️ Edit
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(i)">
+                🗑️ Delete
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="productList.length === 0" class="alert alert-info mt-4">
+    No products added yet.
+  </div>
+</div>
